@@ -1,10 +1,14 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import generics, permissions, viewsets
+from rest_framework import generics, permissions, viewsets,  parsers
 from .serializers import PostSerializer
 from .models import Post
 
+
+
+def upload_path(inance, filename):
+    return '/'.join([])
 class PostList(generics.ListCreateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
@@ -24,6 +28,7 @@ class UserPost(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
+    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
     serializer_class = PostSerializer
 
     def get_queryset(self):
