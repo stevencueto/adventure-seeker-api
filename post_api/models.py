@@ -9,5 +9,5 @@ class Post(models.Model):
    img = models.CharField(max_length=500) 
    current_date = models.DateField(default=date.today)
    user = models.ForeignKey(
-        User, related_name="user", on_delete=models.CASCADE, null=True)
+        User, related_name="post", on_delete=models.CASCADE, null=True)
    likes = models.IntegerField()
