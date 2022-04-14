@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import generics, permissions, viewsets,  parsers
+from django.contrib.auth.models import User
 from .serializers import PostSerializer
 from .models import Post
 
@@ -24,15 +25,16 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = PostSerializer
 
 
+
 class UserPost(viewsets.ModelViewSet):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    parser_classes = [parsers.MultiPartParser, parsers.FormParser]
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        return self.request.user.post.all().order_by('id')
+        return Post.objects.all().order_by('id')
+
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
