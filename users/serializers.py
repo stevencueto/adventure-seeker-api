@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
   class Meta:
     model = User
-    fields = ('id', 'username', 'email', 'post')
+    fields = ('id', 'username', 'email', 'post', 'liked_post')
 
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     )
   class Meta:
     model = User
-    fields = ('id', 'username', 'password', 'email', 'post')
+    fields = ('id', 'username', 'password', 'email', 'post', 'liked_post')
 
 
   def create(self, validated_data):
@@ -37,6 +37,7 @@ class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
     post = PostSerializer(read_only=True, many=True)
+    liked_post = PostSerializer(read_only=True, many=True)
 
     def validate(self, data):
         user = authenticate(**data)
@@ -47,7 +48,7 @@ class LoginSerializer(serializers.Serializer):
 class UpdateUser(serializers.ModelSerializer):
     class Meta:
       model = User
-      fields = ('id', 'username', 'password', 'email')
+      fields = ('id', 'username', 'password', 'email', 'post', 'liked_post')
 
     def update(self,instance, validated_data):
       user = User.objects.get(username=validated_data['username'],email=validated_data["email"])

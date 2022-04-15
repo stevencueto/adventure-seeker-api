@@ -64,8 +64,9 @@ class UserAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [
-        permissions.IsAuthenticated,
-    ]
+    # permission_classes = [
+    #     permissions.IsAuthenticated,
+    # ]
     serializer_class = UserSerializer
     queryset = User.objects.all().order_by('id')
+

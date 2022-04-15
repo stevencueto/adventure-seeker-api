@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from rest_framework import generics, permissions, viewsets,  parsers
@@ -21,9 +21,16 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    queryset = Post.objects.all().order_by('id')
     serializer_class = PostSerializer
+    queryset = Post.objects.all()
 
+
+    def update(self, instance, validated_data):
+        liked_by = validated_data.pop('liked_by')
+        for i in liked_by:
+            instance.liked_by.add(i)
+        instance.save()
+        return instance
 
 
 class UserPost(viewsets.ModelViewSet):
@@ -38,3 +45,8 @@ class UserPost(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+
+
+    
