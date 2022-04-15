@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
+import json
 
 # Create your views here.
 from rest_framework import generics, permissions, viewsets,  parsers
 from django.contrib.auth.models import User
 from .serializers import PostSerializer
+from django.core.serializers import serialize
 from .models import Post
-
+from django.http import HttpResponse
 
 
 def upload_path(inance, filename):
@@ -48,5 +50,22 @@ class UserPost(viewsets.ModelViewSet):
 
 
 
+class LikeView(viewsets.ModelViewSet):
+    permission_classes = [
+        permissions.IsAuthenticated,
+    ]
+    queryset = Post.objects.all().order_by('id') # tell django how to retrieve all objects from the DB, order by id ascending
 
-    
+
+
+    def update(sef,request,pk):
+        user = request.user
+        id=request.POST.get('id')
+        post = Post.objects.get(id=int(pk))
+        if user in post.liked_by.all():
+            post.liked_by.remove(user)
+        else:
+            post.liked_by.add(user)
+        data = serialize("json", [post])
+        return HttpResponse(data, content_type="application/json")
+

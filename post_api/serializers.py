@@ -7,6 +7,7 @@ class PostSerializer(serializers.ModelSerializer): # serializers.ModelSerializer
         many=True,
         queryset=User.objects.all())
 
+
     class Meta:
         model = Post # tell django which model to use
         fields = ('id', 'title', 'location','description', 'img', 'current_date', 'user', 'liked_by') # tell django which fields to include
@@ -15,4 +16,5 @@ class PostSerializer(serializers.ModelSerializer): # serializers.ModelSerializer
         for i in liked_by:
             instance.liked_by.add(i)
         instance.save()
-        return instance
+        return Response(data, status=status.HTTP_200_OK)
+

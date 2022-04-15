@@ -6,6 +6,7 @@ urlpatterns = [
     path('api/post/', views.PostList.as_view(), name='post_list'), # api/contacts will be routed to the ContactList view for handling
     path('api/post/user/', UserPost.as_view({'get': 'list', 'post': 'create'})), # api/contacts will be routed to the ContactDetail view for handling
     path('api/post/<int:pk>', views.PostDetail.as_view(), name='post_detail'), # api/contacts will be routed to the ContactDetail view for handling
+    path('api/post/like/<int:pk>', views.LikeView.as_view({'patch': 'update'}) , name="like_post") # api/contacts will be routed to the ContactDetail view for handling
 ]
 
 

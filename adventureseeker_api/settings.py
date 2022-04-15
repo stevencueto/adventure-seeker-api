@@ -31,7 +31,7 @@ SECRET_KEY = str(os.environ.get("SECRET_KEY"))
 DEBUG = True
 
 
-ALLOWED_HOSTS = ['adventureseekerapi.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['adventureseekerapi.herokuapp.com', 'localhost', '127.0.0.1', '1.0.0.127.in-addr.arpa']
 
 
 # Application definition
@@ -153,7 +153,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
+CSRF_COOKIE_SECURE= True
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
