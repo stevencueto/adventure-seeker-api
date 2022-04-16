@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from post_api.models import Post
-from post_api.serializers import PostSerializer
+from post_api.serializers import SimplePostSerializer
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
-  post = PostSerializer(read_only=True, many=True)
+  post = SimplePostSerializer(read_only=True, many=True)
 
   class Meta:
     model = User
@@ -36,8 +36,8 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-    post = PostSerializer(read_only=True, many=True)
-    liked_post = PostSerializer(read_only=True, many=True)
+    post = SimplePostSerializer(read_only=True, many=True)
+    liked_post = SimplePostSerializer(read_only=True, many=True)
 
     def validate(self, data):
         user = authenticate(**data)
@@ -55,3 +55,8 @@ class UpdateUser(serializers.ModelSerializer):
       user.password = make_password(validated_data["password"])
       user.save()
       return user
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        fields = '__all__'
