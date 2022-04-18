@@ -8,6 +8,7 @@ class PostSerializer(serializers.ModelSerializer): # serializers.ModelSerializer
     class Meta:
         model = Post # tell django which model to use
         fields = ('id', 'title', 'location','description', 'img', 'current_date', 'user', 'liked_by') # tell django which fields to include
+        depth = 1
 
     
     def update(self, instance, validated_data):
