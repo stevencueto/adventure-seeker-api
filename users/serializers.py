@@ -3,14 +3,17 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from post_api.models import Post
-from post_api.serializers import SimplePostSerializer
+from post_api.serializers import PostSerializer
+
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
-  post = SimplePostSerializer(read_only=True, many=True)
+  post = PostSerializer(read_only=True, many=True)
 
   class Meta:
     model = User
     fields = ('id', 'username', 'email', 'post', 'liked_post')
+    depth = 1
+
 
 # Register Serializer
 class RegisterSerializer(serializers.ModelSerializer):
@@ -34,10 +37,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 #Login Serializer
 class LoginSerializer(serializers.Serializer):
+    post = PostSerializer(read_only=True, many=True)
+
     username = serializers.CharField()
     password = serializers.CharField()
-    post = SimplePostSerializer(read_only=True, many=True)
-    liked_post = SimplePostSerializer(read_only=True, many=True)
+
 
     def validate(self, data):
         user = authenticate(**data)
@@ -46,9 +50,12 @@ class LoginSerializer(serializers.Serializer):
         raise serializers.ValidationError("No Matching Credentials")
 
 class UpdateUser(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True, many=True)
     class Meta:
       model = User
       fields = ('id', 'username', 'password', 'email', 'post', 'liked_post')
+      depth = 1
+
 
     def update(self,instance, validated_data):
       user = User.objects.get(username=validated_data['username'],email=validated_data["email"])
@@ -57,6 +64,8 @@ class UpdateUser(serializers.ModelSerializer):
       return user
 
 class SimpleUserSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True, many=True)
+
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ('id', 'username', 'email', 'post', 'liked_post')
